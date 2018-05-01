@@ -20,11 +20,11 @@ export default class DataSource extends Component {
 
   componentWillMount () {
     // connect ws
-    this.observable = Observable.webSocket('ws://006262f2.ngrok.io');
+    this.observable = Observable.webSocket('ws://localhost:8080');
     console.log('created observable');
 
     this.observable = this.observable
-      .map(function (value) { return Observable.just(value).delay(500); })
+      .map(function (value) { return Observable.of(value).delay(500); })
       .concatAll();
 
     this.observable.subscribe(

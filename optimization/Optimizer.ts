@@ -32,7 +32,7 @@ export namespace Optimizer {
         for (let i = 0; i < 1000; i++) {
             if (i > 500) parameters.recrerateAllowInfeasibleInsert = false;
             let newSolution = step(instance, currentSolution, parameters);
-            if (newSolution.cost <= currentSolution.cost || (i > 500 && currentSolution.overload > newSolution.overload)) {
+            if (newSolution.cost < currentSolution.cost || (i > 500 && currentSolution.overload > newSolution.overload)) {
                 currentSolution = newSolution;
                 Communicator.send(instance, currentSolution);
                 improvements++;
