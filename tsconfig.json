@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+      "module": "commonjs",
+      "target": "ES6",
+      "sourceMap": false,
+      "watch" : false,
+      "declaration": true
+    },
+    "exclude": [
+      "node_modules"
+    ],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "ES6",
+      "ES2015",
+      "DOM",
+      "ScriptHost"]
+  }
