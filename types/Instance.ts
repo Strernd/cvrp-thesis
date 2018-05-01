@@ -7,4 +7,5 @@ export interface Instance {
     c: number;
     depot: number;
     best?: number;
+    coords?: any;
 }

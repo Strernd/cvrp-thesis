@@ -4,12 +4,13 @@ import { Parameters, RecreateParamters } from "../types/Parameters";
 import { Ruin } from "./ruinAndRecreate/Ruin";
 import { Recreate } from "./ruinAndRecreate/Recreate";
 import * as range from "lodash.range";
+import { Communicator } from "../communication/Communicator";
 
 export namespace Optimizer {
 
     export function getInitialSolution(instance: Instance): Solution {
         const parameters: RecreateParamters = { recreateAllowInfeasibleTourSelect: false, recreateKNearest: instance.n - 1, recrerateAllowInfeasibleInsert: false }
-        return Recreate.recreate([], range(2, instance.n), instance, parameters);
+        return Recreate.recreate([], range(2, instance.n + 1), instance, parameters);
     }
     export function step(instance: Instance, startSolution: Solution, parameters: Parameters): Solution {
         const { tours, removed } = Ruin.random(startSolution, parameters);
@@ -27,14 +28,17 @@ export namespace Optimizer {
         }
         const startSolution = getInitialSolution(instance);
         let currentSolution = startSolution;
-        for (let i = 0; i < 10000; i++) {
-            if (i > 9000) parameters.recrerateAllowInfeasibleInsert = false;
+        let improvements = 0;
+        for (let i = 0; i < 1000; i++) {
+            if (i > 500) parameters.recrerateAllowInfeasibleInsert = false;
             let newSolution = step(instance, currentSolution, parameters);
-            if (newSolution.cost <= currentSolution.cost || (i > 9000 && currentSolution.overload > newSolution.overload)) {
+            if (newSolution.cost <= currentSolution.cost || (i > 500 && currentSolution.overload > newSolution.overload)) {
                 currentSolution = newSolution;
-                console.log("accepted");
+                Communicator.send(instance, currentSolution);
+                improvements++;
             }
         }
+        console.log(improvements);
         return currentSolution;
     }
 }

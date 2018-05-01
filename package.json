@@ -37,6 +37,7 @@
     "lodash.range": "^3.2.0",
     "ts-node": "^6.0.2",
     "typescript": "^2.8.3",
-    "vrpinstances": "^1.0.2"
+    "vrpinstances": "^1.0.3",
+    "ws": "^5.1.1"
   }
 }
