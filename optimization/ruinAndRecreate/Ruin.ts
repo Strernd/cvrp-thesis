@@ -1,7 +1,7 @@
 import { Solution } from "../../types/Solution";
 import { Instance } from "../../types/Instance";
 import { Parameters } from "../../types/Parameters";
-import * as cloneDeep from "lodash.clonedeep";
+import { cloneDeep } from "lodash";
 import { Tour } from "../../types/Tour";
 
 export namespace Ruin {

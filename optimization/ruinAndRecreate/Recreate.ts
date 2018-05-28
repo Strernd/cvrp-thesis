@@ -1,8 +1,7 @@
 import { Tour } from "../../types/Tour";
 import { Instance } from "../../types/Instance";
 import { RecreateParamters } from "../../types/Parameters";
-import * as cloneDeep from "lodash.clonedeep";
-import * as flatten from "lodash.flatten";
+import { cloneDeep, flatten } from "lodash";
 import { Evaluator } from "../../evaluation/Evaluator";
 import { Solution } from "../../types/Solution";
 

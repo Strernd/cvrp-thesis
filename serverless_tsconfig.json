@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+      "module": "ES2015",
+      "target": "ES6",
+      "sourceMap": false,
+      "watch" : false,
+      "declaration": false,
+      "moduleResolution": "node"
+    },
+    "files": [
+      "webend.ts"
+    ],
+    "exclude": [
+      "node_modules"
+    ],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "ES6",
+      "ES2015",
+      "DOM",
+      "ScriptHost"]
+  }

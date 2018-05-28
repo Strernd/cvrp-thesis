@@ -17,10 +17,11 @@ export namespace Communicator {
     });
 
     export function send(instance: Instance, solution: Solution) {
+        const scale = 10;
         const nodes = [];
         for (let key in instance.coords) {
             const v = instance.coords[key]
-            nodes.push({ id: key, x: v.x*5, y: v.y*5, label: key });
+            nodes.push({ id: key, x: v.x*scale, y: v.y*scale, label: key });
         }
         const edges = [];
         solution.tours.forEach(tour => {
