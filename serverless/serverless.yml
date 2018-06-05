@@ -20,6 +20,8 @@ service: serverless
 provider:
   name: aws
   runtime: nodejs8.10
+  memorySize: 1536
+  timeout: 12
 
 # you can overwrite defaults here
   stage: dev

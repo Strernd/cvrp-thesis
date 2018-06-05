@@ -6,7 +6,10 @@
   "scripts": {
     "test": "jest",
     "start": "npx ts-node index.ts",
-    "serverless": "rollup --config"
+    "benchmark": "npx ts-node benchmark.ts",
+    "benchmark-svl": "npx ts-node master-process/lambdaBenchmark.ts",
+    "build": "rollup --config",
+    "master": "npx ts-node master-process/index.ts"
   },
   "author": "Bernd Strehl <bernd.strehl@gmail.com>",
   "license": "ISC",
@@ -39,12 +42,15 @@
     "@types/node": "^10.1.3",
     "aws-lambda": "^0.1.2",
     "browserify": "^16.2.2",
+    "chalk": "^2.4.1",
+    "console-prompt": "^1.0.0",
     "handlebars": "^4.0.11",
     "lodash": "^4.17.10",
     "lodash.clonedeep": "^4.5.0",
     "lodash.flatten": "^4.4.0",
     "lodash.range": "^3.2.0",
     "node-fetch": "^2.1.2",
+    "table": "^4.0.3",
     "ts-node": "^6.0.5",
     "typescript": "^2.8.3",
     "vrpinstances": "^1.0.3",
