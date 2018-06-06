@@ -2,7 +2,7 @@
     "compilerOptions": {
       "module": "commonjs",
       "target": "ES6",
-      "sourceMap": false,
+      "sourceMap": true,
       "watch" : false,
       "declaration": true
     },

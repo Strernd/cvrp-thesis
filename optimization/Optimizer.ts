@@ -4,12 +4,14 @@ import { Feedback } from "../types/Feedback";
 import { Parameters, RecreateParamters } from "../types/Parameters";
 import { Ruin } from "./ruinAndRecreate/Ruin";
 import { Recreate } from "./ruinAndRecreate/Recreate";
-import { range } from 'lodash';
+import { range, cloneDeep } from 'lodash';
 import { Communicator } from "../communication/Communicator";
 import { Options } from "../types/Options";
 import { Timer } from "../helper/Timer";
 import { Z_BEST_COMPRESSION } from "zlib";
 import { KOpt } from "./kopt/KOpt";
+import { Evaluator } from "../evaluation/Evaluator";
+import { start } from "repl";
 
 export namespace Optimizer {
 
@@ -24,29 +26,51 @@ export namespace Optimizer {
         return recreated;
     }
 
+    export function twoStageOptimization(instance: Instance, startSolution: Solution, options: Options): { solution: Solution, feedback: Feedback } {
+        const firstOpt = optimize(instance, startSolution, options);
+        let bestSolution = firstOpt.solution;
+        let feedback = firstOpt.feedback;
+        const top10 = firstOpt.feedback.pool.sort((a, b) => a.cost - b.cost).slice(0, 10)
+            .map(x => Evaluator.evaluate(x.tours, instance, true));
+        const diverse5 = [top10[0], ...top10.map(x => {
+            return { solution: x, common: Evaluator.commonEdges(top10[0], x) }
+        }).sort((a, b) => a.common - b.common).map(x => x.solution).slice(0, 4)];
+
+        options = cloneDeep(options);
+        options.timeLimit = options.timeLimit / diverse5.length;
+
+        diverse5.forEach(solution => {
+            const secondOpt = optimize(instance, solution, options);
+            if (bestSolution.cost > secondOpt.solution.cost) {
+                bestSolution = secondOpt.solution;
+            }
+            feedback.pool.push(...secondOpt.feedback.pool);
+            feedback.costs.push(...secondOpt.feedback.costs);
+            feedback.runs += secondOpt.feedback.runs;
+            feedback.time += secondOpt.feedback.time;
+        })
+        return { solution: bestSolution, feedback }
+    }
+
     export function optimize(instance: Instance, startSolution: Solution, options: Options): { solution: Solution, feedback: Feedback } {
         const totalTimer = new Timer();
         let bestSolution: Solution = startSolution;
         let runs = 0;
         let costs = [];
         let lastTime = 500;
-
+        const pool: Solution[] = [];
         while (totalTimer.get() < options.timeLimit - lastTime) {
             let roundTimer = new Timer(0);
             runs++;
             let currentSolution: Solution = progressParameterOptimization(instance, startSolution);
             costs.push(currentSolution.cost);
+            pool.push(currentSolution);
             if (currentSolution.cost < bestSolution.cost) {
                 bestSolution = currentSolution;
-                // Communicator.send(instance, bestSolution);
             }
             lastTime = roundTimer.get();
         }
-        /*for (let i = 0; i < instance.n * 20; i++) {
-            let newSolution = KOpt.twoOpt(bestSolution, instance);
-            if (newSolution.cost < bestSolution.cost) bestSolution = newSolution;
-        }*/
-        const feedback: Feedback = { runs, costs, time: totalTimer.get() }
+        const feedback: Feedback = { runs, costs, time: totalTimer.get(), pool }
         return { solution: bestSolution, feedback };
     }
 
@@ -76,12 +100,7 @@ export namespace Optimizer {
                 overwriteRespectOverload = true;
             }
         }
-        /*for (let i = 0; i < instance.n * 20; i++) {
-            let newSolution = KOpt.threeOpt(currentSolution, instance);
-            if (newSolution.cost < currentSolution.cost) currentSolution = newSolution;
-        }*/
         currentSolution = KOpt.twoOpt(currentSolution, instance);
-        // currentSolution = KOpt.randomTwoOpt(currentSolution, instance, instance.n * 20)
         return currentSolution;
     }
 

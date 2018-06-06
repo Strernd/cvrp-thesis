@@ -6,4 +6,5 @@ export interface Solution {
     cost: number;
     feasible: boolean;
     overload: number;
+    successors?: {[key: number] : number}
 }

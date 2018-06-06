@@ -15,7 +15,8 @@ const instanceNames = [
     'A-n60-k9',
     'A-n61-k9',
     'B-n66-k9',
-    'A-n80-k10',];
+    'A-n80-k10',
+];
 const instances: Instance[] = instanceNames.map(vrp.get);
 // ca 50 in 5000
 const options: Options = {
@@ -30,7 +31,8 @@ let points = 0;
 console.log("Time for each instance: ", options.timeLimit + 'ms');
 instances.forEach((instance, i) => {
     const name = instanceNames[i];
-    let { solution, feedback } = Optimizer.optimize(instance, Optimizer.getInitialSolution(instance), options);
+    console.log("Optimizing " + name);
+    let { solution, feedback } = Optimizer.twoStageOptimization(instance, Optimizer.getInitialSolution(instance), options);
     let worse = 1 - ((solution.cost - instance.best) / instance.best);
     const avg = Math.round(feedback.costs.reduce((a, x) => a + x) / feedback.costs.length);
     const avgToBest = Math.round(avg / solution.cost * 100) / 100
