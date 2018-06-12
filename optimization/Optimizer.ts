@@ -12,12 +12,19 @@ import { Z_BEST_COMPRESSION } from "zlib";
 import { KOpt } from "./kopt/KOpt";
 import { Evaluator } from "../evaluation/Evaluator";
 import { start } from "repl";
+import { Savings } from "./savings/Savings";
 
 export namespace Optimizer {
 
+    export function savings(instance: Instance): Solution {
+        return Savings.optimize(instance);
+    }
+
     export function getInitialSolution(instance: Instance): Solution {
-        const parameters: RecreateParamters = { recreateAllowInfeasibleTourSelect: false, recreateKNearest: instance.n - 1, recrerateAllowInfeasibleInsert: false }
-        return Recreate.recreate([], range(2, instance.n + 1), instance, parameters);
+        // const parameters: RecreateParamters = { recreateAllowInfeasibleTourSelect: false, recreateKNearest: instance.n - 1, recrerateAllowInfeasibleInsert: false }
+        // return Recreate.recreate([], range(2, instance.n + 1), instance, parameters);
+        const svgs = Savings.optimize(instance);
+        return KOpt.twoOpt(svgs, instance);
     }
 
     export function step(instance: Instance, startSolution: Solution, parameters: Parameters): Solution {

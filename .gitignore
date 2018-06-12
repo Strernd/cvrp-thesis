@@ -5,3 +5,4 @@ node_modules/
 *.d.ts
 .DS_Store
 .rpt2_cache/
+*/node_modules/

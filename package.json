@@ -7,8 +7,9 @@
     "test": "jest",
     "start": "npx ts-node index.ts",
     "benchmark": "npx ts-node benchmark.ts",
+    "benchmark-savings": "npx ts-node benchmark-savings.ts",
     "benchmark-svl": "npx ts-node master-process/lambdaBenchmark.ts",
-    "build": "rollup --config",
+    "build": "rollup --config && cp webend_build.js aws_lambda/webend.js &&cp webend_build.js google_cloud_functions/webend.js",
     "master": "npx ts-node master-process/index.ts"
   },
   "author": "Bernd Strehl <bernd.strehl@gmail.com>",

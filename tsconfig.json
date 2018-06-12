@@ -2,9 +2,10 @@
     "compilerOptions": {
       "module": "commonjs",
       "target": "ES6",
-      "sourceMap": true,
+      "sourceMap": false,
       "watch" : false,
-      "declaration": true
+      "declaration": false,
+      "outDir": "./build"
     },
     "exclude": [
       "node_modules"

@@ -10,12 +10,15 @@ test("Ruin should remove 2 locations", () => {
         tours: [[2, 3], [4, 5]],
         loads: [20, 20],
         cost: 100,
-        feasible: true
+        feasible: true,
+        overload: 0
     }
     const parameters: Parameters = {
         ruinSizeMax: 3,
         ruinSizeMin: 1,
-        recreateKNearest: 5
+        recreateKNearest: 5,
+        recreateAllowInfeasibleTourSelect: false,
+        recrerateAllowInfeasibleInsert: false,
     }
     const tested = Ruin.random(solution, parameters);
     expect(tested.removed).toEqual([5, 4]);
