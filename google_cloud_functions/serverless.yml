@@ -6,7 +6,7 @@ provider:
   project: sererless-test
   # the path to the credentials file needs to be absolute
   credentials: ~/.gcloud/keyfile.json
-  memorySize: 1024
+  memorySize: 2048
   timeout: 10s
 
 plugins:

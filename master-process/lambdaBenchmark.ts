@@ -3,12 +3,12 @@ import * as vrp from 'vrpinstances';
 import { Optimizer } from "../optimization/Optimizer";
 import { Options } from "../types/Options";
 import { Solution } from "../types/Solution";
-import { lambda } from './lambda'
+import { Remote } from './Remote'
 import { Feedback } from "../types/Feedback";
 const chalk = require('chalk');
 import { table } from 'table';
 
-const n = 50;
+const n = 1;
 const instanceNames = [
     'A-n32-k5',
     'B-n39-k5',
@@ -40,7 +40,7 @@ instances.forEach((instance, i) => {
     const name = instanceNames[i];
     console.log('Making calls for instance ' + name);
     for (let i = 0; i < n; i++) {
-        calls.push(lambda(instance, startSolution, options))
+        calls.push(Remote.google(instance, startSolution, options))
     }
     globalCalls.push(...calls);
     Promise.all(calls).then((results: { solution: Solution, feedback: Feedback }[]) => {
