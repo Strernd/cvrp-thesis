@@ -4,14 +4,11 @@ import { Feedback } from "../types/Feedback";
 import { Parameters, RecreateParamters } from "../types/Parameters";
 import { Ruin } from "./ruinAndRecreate/Ruin";
 import { Recreate } from "./ruinAndRecreate/Recreate";
-import { range, cloneDeep } from 'lodash';
-import { Communicator } from "../communication/Communicator";
+import { cloneDeep, range } from 'lodash';
 import { Options } from "../types/Options";
 import { Timer } from "../helper/Timer";
-import { Z_BEST_COMPRESSION } from "zlib";
 import { KOpt } from "./kopt/KOpt";
 import { Evaluator } from "../evaluation/Evaluator";
-import { start } from "repl";
 import { Savings } from "./savings/Savings";
 
 export namespace Optimizer {
@@ -20,15 +17,18 @@ export namespace Optimizer {
         return Savings.optimize(instance);
     }
 
-    export function getInitialSolution(instance: Instance): Solution {
-        // const parameters: RecreateParamters = { recreateAllowInfeasibleTourSelect: false, recreateKNearest: instance.n - 1, recrerateAllowInfeasibleInsert: false }
-        // return Recreate.recreate([], range(2, instance.n + 1), instance, parameters);
+    export function getInitialSolutionSavings2opt(instance: Instance): Solution {
         const svgs = Savings.optimize(instance);
         return KOpt.twoOpt(svgs, instance);
     }
 
+    export function getInitialSolutionBestInsert(instance: Instance): Solution{
+        const parameters: RecreateParamters = { recreateAllowInfeasibleTourSelect: false, recreateKNearest: instance.n - 1, recrerateAllowInfeasibleInsert: false }
+        return Recreate.recreate([], range(2, instance.n + 1), instance, parameters);
+    }
+
     export function step(instance: Instance, startSolution: Solution, parameters: Parameters): Solution {
-        const { tours, removed } = Ruin.random(startSolution, parameters);
+        const { tours, removed } = Ruin.coinFlip(startSolution, instance, parameters);
         const recreated = Recreate.recreate(tours, removed, instance, parameters);
         return recreated;
     }
@@ -131,6 +131,7 @@ function getParametersByProgress(n: number, progress: number, respectOverload: b
         recrerateAllowInfeasibleInsert: !respectOverload,
         ruinSizeMax: Math.floor((1 - progress) * (n / 2) + 1),
         ruinSizeMin: Math.floor((1 - progress) * (n / 3) + 1),
+        coinFlipRuinChance: (1-progress + 1) * 0.02
     }
 }
 

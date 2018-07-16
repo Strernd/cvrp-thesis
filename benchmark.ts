@@ -46,7 +46,7 @@ console.log("Time for each instance: ", options.timeLimit + 'ms');
 instances.forEach((instance, i) => {
     const name = instanceNames[i];
     console.log("Optimizing " + name);
-    let { solution, feedback } = Optimizer.optimize(instance, Optimizer.getInitialSolution(instance), options);
+    let { solution, feedback } = Optimizer.optimize(instance, Optimizer.getInitialSolutionSavings2opt(instance), options);
     let worse = 1 - ((solution.cost - instance.best) / instance.best);
     const avg = Math.round(feedback.costs.reduce((a, x) => a + x) / feedback.costs.length);
     const avgToBest = Math.round(avg / solution.cost * 100) / 100

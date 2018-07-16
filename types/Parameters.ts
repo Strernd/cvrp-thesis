@@ -8,6 +8,11 @@ export interface RecreateParamters {
 }
 
 export interface RuinParameters{
-    ruinSizeMin: number;
-    ruinSizeMax: number;
+    ruinSizeMin?: number;
+    ruinSizeMax?: number;
+    radialRuinRadius?: number;
+    demandRuinMin?: number;
+    demandRuinMax?: number;
+    coinFlipRuinChance?: number; // Chance that customer is removed
+
 }

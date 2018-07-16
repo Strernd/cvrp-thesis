@@ -11,6 +11,7 @@ export namespace Recreate {
     export function recreate(tours: Tour[], removed: Array<number>, instance: Instance, parameters: RecreateParamters): Solution {
         tours = cloneDeep(tours);
         let intermediateSolution;
+        if(!removed.length) return Evaluator.evaluate(tours, instance);
         removed.forEach(x => {
             intermediateSolution = insert(tours, x, instance, parameters);
             tours = intermediateSolution.tours;
