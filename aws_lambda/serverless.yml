@@ -20,7 +20,7 @@ service: serverless
 provider:
   name: aws
   runtime: nodejs8.10
-  memorySize: 1536
+  memorySize: 1792
   timeout: 12
 
 # you can overwrite defaults here

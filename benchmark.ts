@@ -34,19 +34,20 @@ const instanceNames = [
 const instances: Instance[] = instanceNames.map(vrp.get);
 // ca 50 in 5000
 const options: Options = {
-    timeLimit: 6 * 1000,
+    timeLimit: 30 * 1000,
     nr: 1,
     siblings: 1,
     fixedParameters: false,
 }
-const header = ['name', 'runs', 'time', 'best', 'avg', 'optimal', 'quality', 'avg to best'].map(x => chalk.bold(x));
+const header = ['name', 'runs', 'time', 'start','best', 'avg', 'best known', 'quality', 'avg to best'].map(x => chalk.bold(x));
 const tableData = []
 let points = 0;
 console.log("Time for each instance: ", options.timeLimit + 'ms');
 instances.forEach((instance, i) => {
     const name = instanceNames[i];
     console.log("Optimizing " + name);
-    let { solution, feedback } = Optimizer.optimize(instance, Optimizer.getInitialSolutionSavings2opt(instance), options);
+    const initialSolution = Optimizer.getInitialSolutionSavings2opt(instance);
+    let { solution, feedback } = Optimizer.optimize(instance, initialSolution, options);
     let worse = 1 - ((solution.cost - instance.best) / instance.best);
     const avg = Math.round(feedback.costs.reduce((a, x) => a + x) / feedback.costs.length);
     const avgToBest = Math.round(avg / solution.cost * 100) / 100
@@ -56,6 +57,7 @@ instances.forEach((instance, i) => {
         name,
         feedback.runs,
         Math.round(feedback.time / 10) / 100 + 's',
+        Math.round(initialSolution.cost),
         Math.round(solution.cost),
         avg,
         instance.best,

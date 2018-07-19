@@ -10,8 +10,11 @@ const options = {
   height: '700px',
   nodes: {
     fixed: true,
-    shape: 'dot',
-    size: 5,
+    shape: 'hexagon',
+    size: 15,
+  },
+  edges:{
+      width: 2
   }
 };
 

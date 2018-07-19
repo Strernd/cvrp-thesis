@@ -6,6 +6,16 @@ import { Tour } from "../../types/Tour";
 
 export namespace Ruin {
 
+    export function ruin(type: string, solution: Solution, instance: Instance, parameters: Parameters) {
+        switch (type) {
+            case "random": return random(solution, instance, parameters);
+            case "radial": return radial(solution, instance, parameters);
+            case "demand": return demand(solution, instance, parameters);
+            case "coinFlip": return coinFlip(solution, instance, parameters);
+            default: throw "Unknown ruin type";
+        }
+    }
+
     export function random(solution: Solution, instance: Instance, parameters: Parameters): { tours: Tour[], removed: number[] } {
         let tours = cloneDeep(solution.tours)
         let ruinSize = determineRuineSize(parameters);

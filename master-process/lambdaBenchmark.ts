@@ -28,7 +28,7 @@ let points = 0;
 const globalCalls = [];
 
 instances.forEach((instance, i) => {
-    const startSolution = Optimizer.getInitialSolution(instance);
+    const startSolution = Optimizer.getInitialSolutionSavings2opt(instance);
     const options: Options = {
         timeLimit: 2500,
         nr: 1,

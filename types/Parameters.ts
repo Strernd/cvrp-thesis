@@ -1,4 +1,6 @@
 export interface Parameters extends RecreateParamters, RuinParameters{
+    iterationsPerConfiguration: number;
+    progressIncrease: number;
 }
 
 export interface RecreateParamters {
@@ -8,6 +10,7 @@ export interface RecreateParamters {
 }
 
 export interface RuinParameters{
+    ruinType: string;
     ruinSizeMin?: number;
     ruinSizeMax?: number;
     radialRuinRadius?: number;

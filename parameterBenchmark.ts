@@ -7,6 +7,7 @@ import { Instance } from "./types/Instance";
 import { Parameters } from "./types/Parameters";
 import { start } from "repl";
 import * as fs from "fs";
+import { ParameterBenchmark } from "./helper/ParameterBenchmark";
 
 const instanceNames = [
     'A-n33-k5',
@@ -21,48 +22,10 @@ const instanceNames = [
     'B-n67-k10',
 ];
 const instances: Instance[] = instanceNames.map(vrp.get);
-const options: Options = {
-    timeLimit: 6 * 1000,
-    nr: 1,
-    siblings: 1,
-    fixedParameters: false,
-}
 
-const instance = instances[2];
-const min = 0;
-const max = 1;
-const steps = 20;
-const stepSize = (max - min) / steps;
+const instance = instances[8];
 
-const startSolution = Optimizer.getInitialSolution(instance);
-const parameters: Parameters = {
-    recreateKNearest: 10,
-    recreateAllowInfeasibleTourSelect: false,
-    recrerateAllowInfeasibleInsert: false,
-    coinFlipRuinChance: 0.1
-}
-const results = [];
-const baseline = startSolution.cost;
-for (let i = 0; i <= steps; i++) {
-    let currentValue = min + stepSize * i;
-    console.log("testing " + currentValue)
-    parameters.coinFlipRuinChance = currentValue
-    const runs = [];
-    for (let j = 0; j < 250; j++) {
-        let solution = Optimizer.getBestOfNIterations(20, instance, _.cloneDeep(startSolution), parameters, true);
-        runs.push(baseline - solution.cost);
-    }
-    results.push({
-        y: runs,
-        name: currentValue,
-        type: "box"
-    });
-}
-console.log("baseline " + baseline)
-
-results.forEach((runs, i) => {
-    const avg = runs.y.reduce((a, x) => a += x) / runs.y.length;
-    console.log(i, avg);
-})
+const results = ParameterBenchmark.benchmark(instance, { name: 'ruinSizeMin', min: 2, max: 12, steps: 5, double: "ruinSizeMax", doubleOffset: 0 },
+ {name: 'recreateKNearest', min: 2, max: 12, steps: 5}, 40, 1000, { ruinType: 'random' })
 
 fs.writeFileSync('./templates/results.json', JSON.stringify(results));
