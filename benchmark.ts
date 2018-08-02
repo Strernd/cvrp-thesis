@@ -19,7 +19,7 @@ const chalk = require('chalk');
 // ];
 
 // selected by where savings+2opt performs not good enough
-const instanceNames = [
+let instanceNames = [
     'A-n33-k5',
     'A-n38-k5',
     'A-n39-k5',
@@ -30,11 +30,15 @@ const instanceNames = [
     'B-n51-k7',
     'B-n57-k7',
     'B-n67-k10',
+
+
+
 ];
+instanceNames = vrp.listInstances()
 const instances: Instance[] = instanceNames.map(vrp.get);
 // ca 50 in 5000
 const options: Options = {
-    timeLimit: 30 * 1000,
+    timeLimit: 10 * 1000,
     nr: 1,
     siblings: 1,
     fixedParameters: false,

@@ -138,7 +138,7 @@ function getParametersByProgress(n: number, progress: number, respectOverload: b
         recreateAllowInfeasibleTourSelect: false,
         recreateKNearest: Math.floor(6 + 6 * progress),
         recrerateAllowInfeasibleInsert: !respectOverload,
-        ruinSizeMax: 12,
+        ruinSizeMax: Math.floor(n/4),
         ruinSizeMin: 1,
         ruinType: 'random'
     }

@@ -15,5 +15,10 @@
 ## Shortcomings
 Insert: do not evaluate full solution   
 
+scalable ec2 instances with predicted traffic
+
+requests would be normal distributed 
 
 Benchmark no issue with cold start because operations measured
+
+costs would be different for different instances

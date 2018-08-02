@@ -7,11 +7,27 @@ import { Remote } from './Remote'
 import { Feedback } from "../types/Feedback";
 import { Timer } from "../helper/Timer";
 
-const instance: Instance = vrp.get("B-n57-k7");
-console.time('start');
-const startSolution = Optimizer.getInitialSolutionSavings2opt(instance);
-console.timeEnd('start');
+const instanceNames = [
+    'A-n33-k5',
+    'A-n38-k5',
+    'A-n39-k5',
+    'A-n53-k7',
+    'A-n61-k9',
+    'B-n41-k6',
+    'B-n45-k6',
+    'B-n51-k7',
+    'B-n57-k7',
+    'B-n67-k10',
+    'A-n69-k9',
+    'A-n80-k10',
+    'B-n78-k10',
+    'A-n60-k9',
+    'B-n43-k6',
+    'B-n66-k9',
+];
 
+const instanceName = instanceNames[15];
+const instance: Instance = vrp.get(instanceName);
 
 const options: Options = {
     timeLimit: 1000,
@@ -19,15 +35,15 @@ const options: Options = {
     siblings: 1,
     fixedParameters: false,
 }
-// 1 in 10s ca 65 runs
-// 1 in 2,5s 12 runs
 const run = 1;
-const repeat = 50;
+const repeat = 20;
 const lambdaInstances = 50;
 const benchmark: any[] = [];
 doLambdaOpt(0);
 function doLambdaOpt(iteration: number) {
     const timer = new Timer();
+    const startSolution = Optimizer.getInitialSolutionSavings2opt(instance);
+
     const calls = [];
     for (let i = 0; i < lambdaInstances; i++) {
         calls.push(Remote.aws(instance, startSolution, options))
@@ -49,6 +65,10 @@ function doLambdaOpt(iteration: number) {
     }).catch(console.warn);
 }
 function printResults() {
+    console.time('start')
+    const startSolution = Optimizer.getInitialSolutionSavings2opt(instance);
+    console.timeEnd('start')
+    console.log(instanceName);
     console.log('SOLUTION QUALITY');
     console.log("BEST KNOWN", instance.best);
     console.log("START ", startSolution.cost)
@@ -62,7 +82,7 @@ function printResults() {
     console.log('RUNS');
     console.log("AVERAGE ", avg(benchmark.map(x => x.runs)))
     console.log("SD ", standardDev(benchmark.map(x => x.runs)))
-    require('fs').writeFileSync('./results/2_lambdaBenchmark_n' + lambdaInstances + '_r' + run + '.json', JSON.stringify(benchmark));
+    require('fs').writeFileSync('./benchmark/2_lambdaBenchmark_n' + lambdaInstances + '_r' + run + '_instance_' + instanceName + '.json', JSON.stringify(benchmark));
 }
 
 
